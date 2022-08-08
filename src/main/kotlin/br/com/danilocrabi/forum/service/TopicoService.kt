@@ -1,33 +1,41 @@
 package br.com.danilocrabi.forum.service
 
-import br.com.danilocrabi.forum.model.Curso
+import br.com.danilocrabi.forum.dto.NovoTopicoDto
 import br.com.danilocrabi.forum.model.Topico
-import br.com.danilocrabi.forum.model.Usuario
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
-class TopicoService {
+class TopicoService(
+    private var topicos: List<Topico> = ArrayList(),
+    private var cursoService: CursoService,
+    private var usuarioService: UsuarioService
+) {
 
     fun listar(): List<Topico> {
-        val topico = Topico(
-            id = 1,
-            titulo = "Duvidas no Kotlin",
-            mensagem = " Variaveis no Kotlin",
-            curso = Curso(
-                id = 1,
-                nome = "Kotlin",
-                categoria = "Programacao"
-            ),
-            autor = Usuario (
-                id = 1,
-                nome = "Ana da Silva",
-                email = "ana@email.com"
-            ),
 
-            )
-
-        return Arrays.asList(topico, topico, topico);
+        return topicos;
 
     }
+
+    fun listaPeloId(id: Long): Topico {
+        return topicos.stream().filter { t ->
+            t.id == id
+        }.findFirst().get();
+    }
+
+    fun cadastrar(dto: NovoTopicoDto) {
+
+        topicos = this.topicos.plus(
+            Topico(
+                id = topicos.size.toLong() + 1,
+                titulo = dto.titulo,
+                mensagem = dto.mensagem,
+                curso = cursoService.buscarPorId(dto.idCurso),
+                autor = usuarioService.buscarPorId(dto.idAutor)
+            )
+        );
+        System.out.println("Size : " + topicos.size);
+    }
+
+
 }
