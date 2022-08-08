@@ -1,8 +1,10 @@
 package br.com.danilocrabi.forum.service
 
-import br.com.danilocrabi.forum.dto.NovoTopicoDto
+import br.com.danilocrabi.forum.dto.NovoTopicoForm
+import br.com.danilocrabi.forum.dto.TopicoView
 import br.com.danilocrabi.forum.model.Topico
 import org.springframework.stereotype.Service
+import java.util.stream.Collectors
 
 @Service
 class TopicoService(
@@ -11,19 +13,38 @@ class TopicoService(
     private var usuarioService: UsuarioService
 ) {
 
-    fun listar(): List<Topico> {
+    fun listar(): List<TopicoView> {
 
-        return topicos;
+
+        return topicos.stream().map { t ->
+            TopicoView(
+                id = t.id,
+                titulo = t.titulo,
+                mensagem = t.mensagem,
+                status = t.status,
+                dataCriacao = t.dataCriacao,
+            )
+        }.collect(Collectors.toList());
 
     }
 
-    fun listaPeloId(id: Long): Topico {
-        return topicos.stream().filter { t ->
+    fun listaPeloId(id: Long): TopicoView {
+
+        val t = topicos.stream().filter { t ->
             t.id == id
         }.findFirst().get();
+
+        return TopicoView(
+            id = t.id,
+            titulo = t.titulo,
+            mensagem = t.mensagem,
+            status = t.status,
+            dataCriacao = t.dataCriacao,
+        )
+
     }
 
-    fun cadastrar(dto: NovoTopicoDto) {
+    fun cadastrar(dto: NovoTopicoForm) {
 
         topicos = this.topicos.plus(
             Topico(
