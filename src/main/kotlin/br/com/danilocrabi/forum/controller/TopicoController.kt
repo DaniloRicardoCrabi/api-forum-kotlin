@@ -4,6 +4,7 @@ import br.com.danilocrabi.forum.dto.AtualizarTopicoForm
 import br.com.danilocrabi.forum.dto.NovoTopicoForm
 import br.com.danilocrabi.forum.dto.TopicoView
 import br.com.danilocrabi.forum.service.TopicoService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
@@ -36,11 +37,13 @@ class TopicoController(
     }
 
     @PutMapping
-    fun atualizar(@RequestBody @Valid dto: AtualizarTopicoForm) {
-        service.atualizar(dto);
+    fun atualizar(@RequestBody @Valid dto: AtualizarTopicoForm): ResponseEntity<TopicoView> {
+        val topicoAtualizado = service.atualizar(dto);
+        return ResponseEntity.ok(topicoAtualizado);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deletar(@PathVariable id: Long) {
         service.deletar(id);
     }
