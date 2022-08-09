@@ -1,5 +1,6 @@
 package br.com.danilocrabi.forum.service
 
+import br.com.danilocrabi.forum.dto.AtualizarTopicoForm
 import br.com.danilocrabi.forum.dto.NovoTopicoForm
 import br.com.danilocrabi.forum.dto.TopicoView
 import br.com.danilocrabi.forum.mapper.TopicoFormMapper
@@ -39,5 +40,33 @@ class TopicoService(
 
     }
 
+    fun atualizar(dto: AtualizarTopicoForm) {
+
+        val topico = this.topicos.stream().filter { t ->
+            t.id == dto.id
+        }.findFirst().get();
+
+        topicos = topicos.minus(topico).plus(
+            Topico(
+                id = dto.id,
+                mensagem = dto.mensagem,
+                titulo = dto.titulo,
+                autor = topico.autor,
+                curso = topico.curso,
+                respostas = topico.respostas,
+                status = topico.status,
+                dataCriacao = topico.dataCriacao
+            )
+        )
+
+    }
+
+    fun deletar(id: Long) {
+        val topico = this.topicos.stream().filter { t ->
+            t.id == id
+        }.findFirst().get();
+
+        topicos = topicos.minus(topico);
+    }
 
 }

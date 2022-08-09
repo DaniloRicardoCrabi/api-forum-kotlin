@@ -1,5 +1,6 @@
 package br.com.danilocrabi.forum.controller
 
+import br.com.danilocrabi.forum.dto.AtualizarTopicoForm
 import br.com.danilocrabi.forum.dto.NovoTopicoForm
 import br.com.danilocrabi.forum.dto.TopicoView
 import br.com.danilocrabi.forum.service.TopicoService
@@ -25,6 +26,16 @@ class TopicoController(
     @PostMapping
     fun cadastrar(@RequestBody @Valid dto: NovoTopicoForm) {
         service.cadastrar(dto);
+    }
+
+    @PutMapping
+    fun atualizar(@RequestBody @Valid dto: AtualizarTopicoForm) {
+        service.atualizar(dto);
+    }
+
+    @DeleteMapping("/{id}")
+    fun deletar(@PathVariable id: Long) {
+        service.deletar(id);
     }
 
 }
