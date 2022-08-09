@@ -4,6 +4,7 @@ import br.com.danilocrabi.forum.dto.NovoTopicoForm
 import br.com.danilocrabi.forum.dto.TopicoView
 import br.com.danilocrabi.forum.service.TopicoService
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController()
 @RequestMapping("/topicos")
@@ -22,8 +23,8 @@ class TopicoController(
     }
 
     @PostMapping
-    fun cadastrar(@RequestBody topico: NovoTopicoForm) {
-        service.cadastrar(topico);
+    fun cadastrar(@RequestBody @Valid dto: NovoTopicoForm) {
+        service.cadastrar(dto);
     }
 
 }
