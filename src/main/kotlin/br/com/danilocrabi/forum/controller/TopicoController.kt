@@ -4,7 +4,9 @@ import br.com.danilocrabi.forum.dto.AtualizarTopicoForm
 import br.com.danilocrabi.forum.dto.NovoTopicoForm
 import br.com.danilocrabi.forum.dto.TopicoView
 import br.com.danilocrabi.forum.service.TopicoService
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.util.UriComponentsBuilder
 import javax.validation.Valid
 
 @RestController()
@@ -24,8 +26,13 @@ class TopicoController(
     }
 
     @PostMapping
-    fun cadastrar(@RequestBody @Valid dto: NovoTopicoForm) {
-        service.cadastrar(dto);
+    fun cadastrar(
+        @RequestBody @Valid dto: NovoTopicoForm,
+        uriBuilder: UriComponentsBuilder
+    ): ResponseEntity<TopicoView> {
+        val topicoView = service.cadastrar(dto);
+        val uri = uriBuilder.path("/topicos/${topicoView}").build().toUri();
+        return ResponseEntity.created(uri).body(topicoView)
     }
 
     @PutMapping
