@@ -64,6 +64,7 @@ class TopicoService(
     }
 
     fun deletar(id: Long) {
+        
         val topico = this.topicos.stream().filter { t ->
             t.id == id
         }.findFirst().orElseThrow { NotFoundException(notFoundMessage) }
