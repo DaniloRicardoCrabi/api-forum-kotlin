@@ -7,8 +7,9 @@ import br.com.danilocrabi.forum.exception.NotFoundException
 import br.com.danilocrabi.forum.mapper.TopicoFormMapper
 import br.com.danilocrabi.forum.mapper.TopicoViewMapper
 import br.com.danilocrabi.forum.repository.TopicoRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors
 
 @Service
 class TopicoService(
@@ -18,17 +19,20 @@ class TopicoService(
     private val notFoundMessage: String = "Topico não encontrado"
 ) {
 
-    fun listar(nomeCurso: String): List<TopicoView> {
+    fun listar(
+        nomeCurso: String?,
+        paginacao: Pageable
+    ): Page<TopicoView> {
 
         val topicos = if (nomeCurso == null) {
-            repository.findAll();
+            repository.findAll(paginacao);
         } else {
-            repository.findByCursoNome(nomeCurso);
+            repository.findByCursoNome(nomeCurso, paginacao);
         }
 
-        return topicos.stream().map { t ->
+        return topicos.map { t ->
             topicoViewMapper.map(t)
-        }.collect(Collectors.toList())
+        }
     }
 
     fun listaPeloId(id: Long): TopicoView {

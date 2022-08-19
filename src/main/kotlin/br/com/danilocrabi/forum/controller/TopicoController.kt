@@ -4,6 +4,9 @@ import br.com.danilocrabi.forum.dto.AtualizarTopicoForm
 import br.com.danilocrabi.forum.dto.NovoTopicoForm
 import br.com.danilocrabi.forum.dto.TopicoView
 import br.com.danilocrabi.forum.service.TopicoService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -17,8 +20,11 @@ class TopicoController(
     private val service: TopicoService
 ) {
     @GetMapping
-    fun listar(@RequestParam(required = false) nomeCurso: String): List<TopicoView> {
-        return service.listar(nomeCurso);
+    fun listar(
+        @RequestParam(required = false) nomeCurso: String,
+        @PageableDefault(size = 5) paginacao: Pageable //Pageable é um objeto que representa a paginação
+    ): Page<TopicoView> {
+        return service.listar(nomeCurso, paginacao);
     }
 
     @GetMapping("/{id}")
@@ -29,8 +35,7 @@ class TopicoController(
     @PostMapping
     @Transactional
     fun cadastrar(
-        @RequestBody @Valid dto: NovoTopicoForm,
-        uriBuilder: UriComponentsBuilder
+        @RequestBody @Valid dto: NovoTopicoForm, uriBuilder: UriComponentsBuilder
     ): ResponseEntity<TopicoView> {
         val topicoView = service.cadastrar(dto);
         val uri = uriBuilder.path("/topicos/${topicoView}").build().toUri();
