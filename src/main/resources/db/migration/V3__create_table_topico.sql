@@ -1,5 +1,5 @@
 create table topico(
-    id bigint not null auto_increment,
+    id bigint SERIAL PRIMARY KEY,
     titulo varchar(50) not null,
     mensagem varchar(50) not null,
     data_criacao timestamp not null,
