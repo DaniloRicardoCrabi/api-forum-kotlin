@@ -2,6 +2,7 @@ package br.com.danilocrabi.forum.controller
 
 import br.com.danilocrabi.forum.dto.AtualizarTopicoForm
 import br.com.danilocrabi.forum.dto.NovoTopicoForm
+import br.com.danilocrabi.forum.dto.TopicoPorCategoriaDto
 import br.com.danilocrabi.forum.dto.TopicoView
 import br.com.danilocrabi.forum.service.TopicoService
 import org.springframework.cache.annotation.CacheEvict
@@ -65,6 +66,11 @@ class TopicoController(
     @CacheEvict(value = ["topicos"], allEntries = true)
     fun deletar(@PathVariable id: Long) {
         service.deletar(id);
+    }
+
+    @GetMapping("/relatorio")
+    fun relatorio(): List<TopicoPorCategoriaDto> {
+        return this.service.relatorio();
     }
 
 }
