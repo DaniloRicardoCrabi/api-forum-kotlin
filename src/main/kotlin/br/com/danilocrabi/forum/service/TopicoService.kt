@@ -18,7 +18,6 @@ class TopicoService(
     private val topicoFormMapper: TopicoFormMapper,
     private val notFoundMessage: String = "Topico não encontrado"
 ) {
-
     fun listar(
         nomeCurso: String?,
         paginacao: Pageable
