@@ -2,6 +2,7 @@ package br.com.danilocrabi.forum.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -17,6 +18,8 @@ class SecurityConfiguration() {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http.authorizeHttpRequests()
+            .antMatchers(HttpMethod.GET, "/topicos").permitAll()
+
             .anyRequest()
             .authenticated()
             .and()
@@ -26,12 +29,15 @@ class SecurityConfiguration() {
             .formLogin()
             .disable()
             .httpBasic()
+            .and()
+            .csrf().disable()
         return http.build()
     }
 
     @Bean
-    fun encoder(): PasswordEncoder? {
-        return BCryptPasswordEncoder()
+    fun passwordEncoder(): PasswordEncoder? {
+        return BCryptPasswordEncoder();
     }
+
 }
 

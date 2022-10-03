@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: test_db
+      POSTGRES_DB: forum
     ports:
       - "5432:5432"
     networks:
@@ -24,15 +24,6 @@ services:
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "15432:80"
-    networks:
-      - postgres-compose-network
-
-  redis:
-    container_name: redis
-    image: redis:alpine
-    restart: always
-    ports:
-      - "6379:6379"
     networks:
       - postgres-compose-network
 
